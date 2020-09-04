@@ -1,0 +1,1107 @@
+<!DOCTYPE html> 
+<html>
+<head>
+  <title> Space Defenders </title>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
+  <script src="library/js/improved_text.js"></script>
+  <script src="library/js/round_control.js"></script>
+  <script src="library/js/shoot.js"></script>
+  <script src="library/js/main.js"></script>
+  <style>
+    body {
+      background-color: lightblue;
+      text-align: center;
+    }
+    img {
+      border: solid black 1px;
+      display: none;
+      width:150px;
+      height:150px;
+    }
+    canvas {
+      border: groove black 6px;
+      border-radius:3px;
+    }
+    @font-face {
+      font-family: future;
+      src: url(library/fonts/future.TTF);
+    }
+    @font-face {
+      font-family: chunk;
+      src: url(library/fonts/chunk.OTF);
+    }
+    @font-face {
+      font-family: arcade;
+      src: url(library/fonts/arcade.TTF);
+    }
+  </style>
+</head>
+<body>
+<!-- Importing Images -->
+<img src="library/images/hawker.png" id="hawkerImage">
+<img src="library/images/minijet.png" id="minijetImage">
+<img src="library/images/aimless.gif" id="aimlessImage">
+<img src="library/images/arrowhead.png" id="arrowheadImage">
+<img src="library/images/fighter.png" id="fighterImage">
+<img src="library/images/splitter.png" id="splitterImage">
+<img src="library/images/split.png" id="splitImage">
+<img src="library/images/super_hawker.png" id="superHawkerImage">
+<img src="library/images/teleporter.png" id="teleporterImage">
+<img src="library/images/steel.png" id="steelImage">
+<img src="library/images/sucker.png" id="suckerImage">
+<img src="library/images/hawker_frozen.png" id="frozenHawkerImage">
+<img src="library/images/minijet_frozen.png" id="frozenMinijetImage">
+<img src="library/images/aimless_frozen.png" id="frozenAimlessImage">
+<img src="library/images/arrowhead_frozen.png" id="frozenArrowheadImage">
+<img src="library/images/fighter_frozen.png" id="frozenFighterImage">
+<img src="library/images/splitter_frozen.png" id="frozenSplitterImage">
+<img src="library/images/split_frozen.png" id="frozenSplitImage">
+<img src="library/images/teleporter_frozen.png" id="frozenTeleporterImage">
+<img src="library/images/steel_frozen.png" id="frozenSteelImage">
+
+<img src="library/images/babymother.png" id="babymotherImage">
+<img src="library/images/babymother_broke.png" id="babymotherBroke">
+<img src="library/images/bug_blue.png" id="blueBug">
+<img src="library/images/bug_yellow.png" id="yellowBug">
+<img src="library/images/bug_green.png" id="greenBug">
+<img src="library/images/bug_frozen.png" id="frozenBug">
+
+<img src="library/images/knife.png" id="knifeImage">
+<img src="library/images/survivors.png" id="survivorsImage">
+<img src="library/images/bomb.png" id="bombImage">
+<img src="library/images/moneybag.png" id="moneybag">
+<img src="library/images/shield.png" id="shield">
+
+<img src="library/images/sentry_body.png" id="sentryBodyImage">
+<img src="library/images/sentry_barrel.png" id="sentryBarrelImage">  
+
+<img src="library/images/bible.png" id="bibleImage">
+
+<!-- Importing Sounds -->
+<audio id="shootSound">
+  <source src="library/sounds/shoot_sound.mp3">
+</audio>
+<audio id="lazerSound">
+  <source src="library/sounds/lazer_sound.mp3">
+</audio>
+<audio id="music">
+  <source src="library/sounds/space_defenders_music.mp3">
+</audio>
+<!-- Establishing the canvas -->
+<canvas id="canvas" height="750" width="750"> Your browser does not support the game. Use a different browser or update </canvas>
+<!-- Scripts -->
+<script>
+//Script by Luke DiGiovanna
+canv = document.getElementById('canvas');
+ctx = canv.getContext("2d");
+//getting sounds from html 
+shootSound = document.getElementById("shootSound"); 
+lazerSound = document.getElementById("lazerSound");
+mainMusic = document.getElementById("music");
+//getting images from html
+hawkerImage = document.getElementById("hawkerImage");
+minijetImage = document.getElementById("minijetImage");
+arrowheadImage = document.getElementById("arrowheadImage");
+fighterImage = document.getElementById("fighterImage");
+aimlessImage = document.getElementById("aimlessImage");
+splitterImage = document.getElementById("splitterImage");
+splitImage = document.getElementById("splitImage");
+teleporterImage = document.getElementById("teleporterImage");
+superHawkerImage = document.getElementById("superHawkerImage");
+steelImage  = document.getElementById("steelImage");
+suckerImage = document.getElementById("suckerImage");
+frozenHawkerImage = document.getElementById("frozenHawkerImage");
+frozenMinijetImage = document.getElementById("frozenMinijetImage");
+frozenArrowheadImage = document.getElementById("frozenArrowheadImage");
+frozenAimlessImage = document.getElementById("frozenAimlessImage");
+frozenFighterImage = document.getElementById("frozenFighterImage");
+frozenSplitterImage = document.getElementById("frozenSplitterImage");
+frozenSplitImage = document.getElementById("frozenSplitImage");
+frozenTeleporterImage = document.getElementById("frozenTeleporterImage");
+frozenSteelImage = document.getElementById("frozenSteelImage");
+frozenSuckerImage = document.getElementById("steelImage");
+
+babymotherImage = document.getElementById("babymotherImage");
+babymotherBroke = document.getElementById("babymotherBroke");
+
+yellowBug = document.getElementById("yellowBug");
+blueBug = document.getElementById("blueBug");
+greenBug = document.getElementById("greenBug");
+frozenBug = document.getElementById("frozenBug");
+
+bibleImage = document.getElementById("bibleImage");
+knifeImage = document.getElementById("knifeImage");
+survivorsImage = document.getElementById("survivorsImage");
+bombImage = document.getElementById("bombImage");
+moneybagImage = document.getElementById("moneybag");
+shieldImage = document.getElementById("shield");
+
+sentryBodyImage = document.getElementById("sentryBodyImage");
+sentryBarrelImage = document.getElementById("sentryBarrelImage");
+
+images = [hawkerImage,minijetImage,arrowheadImage,fighterImage,aimlessImage,splitImage,superHawkerImage,teleporterImage,steelImage,suckerImage,babymotherImage,bombImage];
+
+setInterval(update,20);    
+setInterval(roundControl,20);
+setTimeout(summon,3000);
+setInterval(moneyFlash,500);
+setInterval(secondTimer,100);
+document.addEventListener("keydown", keyPush);
+document.addEventListener("keyup", keyNotPush);  
+
+browser = navigator.appCodeName;
+version = "Developmental ALPHA 1.3";
+gameTimer = 0;
+
+popups = [];
+popup = false;
+
+screenToReturnTo = "main";
+
+musicMute = true;
+soundMute = false;
+
+showHitbox = false;
+showInfo = false;
+
+mainTimer = 0;
+
+characters = [
+  {x:canv.width/2,y:550,name:"Default",info:"The default ship in the game. Moderate starting stats.",   movementSpeed:4.5,health:60, maxHealth:60, regeneration:0.00,lives:1,money:50,bulletPower:30,bulletSpeed:10,bulletSize:6,shootSpeed:750,unlocked:true,color:"red",display:"▲"},
+  {x:canv.width/2+220,y:400,name:"Wizards",info:"Unleash the powers of the magic from your home planet",movementSpeed:4.5,health:50, maxHealth:50, regeneration:0.00,lives:1,money:50,bulletPower:35,bulletSpeed:8,bulletSize:6,shootSpeed:1500,unlocked:true,color:"aqua",display:"✯"},
+  {x:canv.width/2+110,y:200,name:"Healers",info:"You brought the peaceful healers of your world.",      movementSpeed:5.0,health:75, maxHealth:75, regeneration:0.1,lives:1,money:75,bulletPower:25,bulletSpeed:10,bulletSize:6,shootSpeed:800,unlocked:false,color:"rgb(255,20,147)",display:"❤"},
+  {x:canv.width/2-110,y:200,name:"Tank",info:"Covered in titanium with titanium bullets",               movementSpeed:2.5,health:150,maxHealth:150,regeneration:0.,lives:1,money:50,bulletPower:100,bulletSpeed:7,bulletSize:10,shootSpeed:2500,unlocked:true,color:"darkgray",display:"✚"},
+  {x:canv.width/2-220,y:400,name:"GOD MODE",info:"Basically hacked",unlocked:true,                     movementSpeed:7.5,health:500,maxHealth:500,regeneration:0.25,lives:3,money:500,bulletPower:100,bulletSpeed:14,bulletSize:9,shootSpeed:400,color:"yellow",display:"✞",}
+];
+characterSelect = 0;//index of character thing
+characterFade = 0;
+startCharacterFade = false;
+
+px=375;
+py=620;
+pSize = 30;
+rv=lv=0;
+movementSpeed = 5;
+rBreak=lBreak=false;
+
+buddies = [];
+bullets = [];
+enemies = [];
+bosses = [];
+particles = [];
+orbiters = [];
+possibleConsumables = [
+  {type:"instant_health",display:"❤",color:"red"},
+  {type:"freeze",display:"❄",color:"aqua"},
+  {type:"death",display:"☢",color:"yellow"},
+  {type:"speed",display:"☄",color:"blue"},
+  {type:"triple_money",display:"🤑",color:"green"},
+  {type:"invincibility",display:"",color:"white"}
+];
+consumables = [];
+fallingConsumables = [
+  // {x:375,y:0,type:"instant_health",display:"❤",color:"red",pulse:150,pulseIncrement:10, radius: 17,health:50, xv: 0, yv: 1},
+  // {x:275,y:0,type:"freeze",display:"❄",color:"aqua",pulse:150,pulseIncrement:10, radius: 17,health:50, xv: 0, yv: 1},
+  // {x:475,y:0,type:"death",display:"☢",color:"yellow",pulse:150,pulseIncrement:10, radius: 17,health:50, xv: 0, yv: 1},
+  // {x:375,y:0,type:"triple_money",display:"🤑",color:"green",pulse:150,pulseIncrement:10,radius:17,health:50,xv:0,yv:1}
+];
+
+round = 1;
+moneybags = [];
+//moneybags.push({x:375,y:375,value:Math.round(Math.random()*(round*round*2.5)),size:0,age:200});
+//console.log(moneybags[0].value);
+
+reusables = [];
+decoys = [];
+
+message = "";
+
+tips = [
+  "Sometimes it is better to get hit a little to save from a lot", 
+  "Most enemies will kill themselves to kill you", 
+  "Many items work best with other items", 
+  "Consumables can only be used once, so use them wisely!", 
+  "You can warp space time by going through either side of the map", 
+  "The freeze potion only lasts 7 seconds!", 
+  "The only way to stop a fighter is to kill it", 
+  "Reusables last forever", 
+  "You can have at most 3 reusables",
+  "Get consumables by killing enemies",
+  "You have to shoot a falling consumable to get it",
+  "Get critical hits on enemies by hitting them in the middle",
+  "Critical hits on enemies deal 50% more damage",
+  "Your luck stat does not contribute to critical chances"
+];//random tips that are displayed on the loading screen
+
+redzoneColor = 150;
+redzoneIncrement = 1;
+health = 60;
+smoothHealth = 0;
+smoothhealthText = smoothHealth;
+maxHealth = health;
+realHealthPercent = 1;
+regeneration = 0; //per second during actual game time
+healthAdd = 1;
+lives = 1;
+protection = 0.0; // value between 0.0 and 1.0... 1.0 deflects all damage, 0.0 - none
+dead = false;
+
+score = 0;
+scoreDisplay = score;
+scoreAdd = 1;
+
+moneyMultiplier = 1;
+trippleMoneyActive = false;
+money = 50;
+
+luck = 0;
+
+shields = [];
+//shields.push({x:375,y:600,type:"perm",width:250,xv:2,yv:0});
+shielding = false;
+shieldTime = 100;
+maxShieldTime = 100;
+dmgDeflection = 1.0; //given between 0 and 1, 0 deflects all damage and 1 deflects none (0.5 does half)
+
+//shooting stuff
+shootMode = "single"; //single, triple_burst, 5_burst, double, lazer, bazooka, shotgun
+shooting = false;
+shootSpeed = 750;
+modifiedShootSpeed = 750;
+shootWait = 0;
+bulletPower = 25;
+bulletSpeed = 10;
+bulletSize = 8;
+critChance = 0.2;
+critDamage = 0.5;
+homing = false;
+chocolateMilk = false;
+bloodSoaked = false;
+sideGunners = false;
+slowShot = false;
+wiggly = false;
+boomerang = false;
+pointyShip = false;
+knife = false;
+wealthpower = true;
+wealthDmg = 0;
+bulletPowerMultiplier = 1;
+unlockedWeapons = ["Single"];//"Double", "Triple Shot", "Five Shot", "Bazooka", "Shotgun", "Lazer"];
+lazer = false;
+lazerShooting = false;
+weaponPosition = 0;
+upPosition = downPosition = 0;
+guider = false;
+
+//round stuff
+totalRoundEnemies = 0; //total enemies killed or summoned per round 
+roundEnemies = 5; //amount of enemies that will be summoned
+summonedRoundEnemies = 0; //increases each time an enemy is summoend
+raColor = 0;
+raIncrement = 0;
+tEnemies = 0; //total enemies killed
+nextRoundTimer = 10;
+endRoundTimer = 0; //for counting up once the round has finished
+roundCont = false;
+level = 1;
+roundMoney = 0;
+
+ironWall = false;
+ironWallHealth = 50;
+ironWallMaxHealth = ironWallHealth;
+ironWallHealthPercent = 1;
+
+freeze = false;
+
+screen = "main"; //can be main, game, death, or shop, howToPlay, character, loading
+buttons = [
+  {function:"character",borderColor:"white",text:"Play",x:375 ,y:250},
+  {function:"howToPlay",borderColor:"white",text:"How to Play",x:375 ,y:300},
+  {function:"settings",borderColor:"white",text:"Settings",x:375 ,y:350}, 
+  {function:"statistics", borderColor:"white", text:"Statistics", x:375, y:400}, 
+  {function:"updateNotes",borderColor:"white",text:"Update Notes",x:375,y:450}
+];
+buttonPosition = 0;
+selectionMade = false;
+
+settingButtons = [
+  {function:"sound",borderColor:"white",text:"MUTE SOUND",x:250,y:250,enabled:false},
+  {function:"music",borderColor:"white",text:"MUTE MUSIC",x:250,y:320,enabled:false}
+];
+settingPosition = 0;
+
+counter = 0; //for trig functions with the orbiter
+pause = false;
+pauseSelection = 0;
+
+purchasedItems = [];
+shuffled = false;
+shopAvailable = false;
+levelItems = 0;
+items = [//format {item:"",displayName:"",lore:"",price:0,priceColor:"green",bought:false,level:0,consumable:false},
+  {item:"sold",displayName:"Bought out", lore:"You've bought everything else!", price:0, priceColor:"red", bought:true}, //sold display
+  //LEVEL 1 - ROUND 0
+  {item:"5.56",displayName:"5.56 NATO",lore:"More powerful bullets (+5 bullet power)",price: 80,priceColor:"green", bought: false,level:1, consumable:false},
+  {item:"fortify_one",displayName:"Fortification I",lore:"Fortify your fortress (+20 max health)",price:75,priceColor:"green", bought: false,level:1, consumable:false},
+  {item:"better_jets",displayName:"Better Jets", lore:"Zip faster across the map", price: 125, priceColor:"green", bought: false,level:1, consumable:false},
+  {item:"harder_bullets",displayName:"Harder Bullets",lore:"More powerful bullets (+10 bullet power)", price: 200, priceColor:"green", bought:false,level:1, consumable:false},
+  {item:"guider",displayName:"Guider",lore:"Gives a projected path of bullet",price:50,priceColor:"green",bought:false,level:1, consumable:false},
+  {item:"allstats",displayName:"The Gift",lore:"All stats up!",price:150,priceColor:"green",bought:false, level:1,consumable:false},
+  {item:"longerbarrel",displayName:"Longer Barrel",lore:"Your bullets go faster and deal more damage",price:300,bought:false,level:1,consumable:false},
+  {item:"dogfood",displayName:"Dog Food",lore:"Become beastlike",price:85,priceColor:"green",bought:false,level:1,consumable:false},
+  {item:"knives",displayName:"Knives",lore:"Start throwing some knives instead of bullets",price:175,priceColor:"green",bought:false,level:1,consumable:false},
+  {item:"highercrit",displayName:"Critical Chance",lore:"10% higher chance to get a critical hit",price:65,priceColor:"green",bought:false,level:1,consumable:false},
+  {item:"bettercrit",displayName:"Better Crits",lore:"Critical hits do 25% more damage",price:130,priceColor:"green",bought:false,level:1,consumable:false},
+  //LEVEL 2 - ROUND 5
+  {item:"fourleaf",displayName:"4 Leaf Clover",lore:"Luck up!",price:200,priceColor:"green",bought:false,level:2,consumable:false},
+  {item:"prayers",displayName:"Prayers",lore:"Earthly prayers save you",price:600,priceColor:"green",bought:false,level:2,consumable:false},
+  {item:"double_gun",displayName:"Double Gunner",lore:"Adds a double shot to your ship",price: 75,priceColor:"green", bought: false,level:2, consumable:false},
+  {item:"regen_one",displayName:"Self Repairing Fortress",lore:"Add a regen of 0.25 health/second", price: 250, priceColor:"green",bought:false,level:2,consumable:false},
+  {item:"orbiter",displayName:"Orbiting Buddy",lore:"A buddy orbits and kills!",price:900, priceColor:"green",bought:false,level:2,consumable:false},
+  {item:"triple_gun",displayName:"Triple Gunner",lore:"Adds a triple shot to your ship", price: 150, priceColor:"green", bought:false,level:2,consumable:false},
+  {item:"bigger_bullets",displayName:"Bigger Bullets",lore:"Bullets grow by 50%!",price:180,priceColor:"green",bought:false,level:2, consumable:false},
+  {item:"submachine",displayName:"Sub-Machine Gun", lore:"Increases your rate of fire",price: 500, priceColor:"green", bought:false,level:2,consumable:false},
+  {item:"sidegun",displayName:"Side Gunners",lore:"Miniguns on the side of your ship",price:800,priceColor:"green",bought:false,level:2,consumable:false},
+  {item:"wiggly",displayName:"Wiggly Bullets",lore:"Your bullets dont know where to go.",price:600,priceColor:"green",bought:false,level:2,consumable:false},
+  {item:"pointyship",displayName:"Pointy Ship",lore:"Use yourself as your weapon",price:1550,priceColor:"green",bought:false,level:2,consumable:false},
+  {item:"healer",displayName:"Reusable Health",lore:"Heal yourself every 2 minutes",price:1400,priceColor:"green",bought:false,level:2,consumable:false},
+  {item:"fullmetal",displayName:"Full Metal Jacket",lore:"Encase your bullets and deal more damage",price:750,priceColor:"green",bought:false,level:2,consumable:false},
+  {item:"titanium",displayName:"Titanium Cover",lore:"Protect your planet (+20% dmg deflection)",price:500,priceColor:"green",bought:false,level:2,consumable:false},
+  //LEVEL 3 - ROUND 10
+  {item:"sentrygun",displayName:"Sentry Gun",lore:"Shoot down enemies",price:1500,priceColor:"green",bought:false,level:3,consumable:false},
+  {item:"fiveleaf",displayName:"5 Leaf Clover",lore:"Super lucky",price:1000,priceColor:"green",bought:false,level:3,consumable:false},
+  {item:"shotgun",displayName:"Shot Gun",lore:"A slower, but much more powerful gunner",price:850,priceColor:"green",bought:false,level:3,consumable:false},
+  {item:"buddy",displayName:"Buddy",lore:"A mini jet who helps you take down enemies",price:1750,priceColor:"green",bought:false,level:3,consumable:false},
+  {item:"cattail",displayName:"Cat Tail",lore:"9 lives",price:3000,priceColor:"green",bought:false,level:3,consumable:false},
+  {item:"machine",displayName:"Machine Gun", lore:"Super fast shooting",price: 9500, priceColor:"green", bought:false,level:3, consumable:false},
+  {item:"homing",displayName:"Homing Bullets", lore:"High tech tracking",price: 3750, priceColor:"green", bought:false,level:3, consumable:false},
+  {item:"iron_wall",displayName:"Iron Wall",lore:"Add a wall to block enemies",price: 1500, priceColor:"green",bought:false,level:3, consumable:false},
+  {item:"bloodbullets",displayName:"Blood Bullets",lore:"You soak your bullets in the blood of your enemies",price:1250,priceColor:"green",bought:false,level:3,consumable:false},
+  {item:"milk",displayName:"Chocolate Milk",lore:"Super speed but weak",price:1850,priceColor:"green",bought: false,level:3, consumable:false},
+  {item:"slowshot",displayName:"Sludge Shot",lore:"A chance to slow enemies.",price:2500,priceColor:"green",bought:false,level:3,consumable:false},
+  {item:"boomerang",displayName:"Boomerang Bullets", lore:"May your bullets return",price:3835,priceColor:"green",bought:false,level:3,consumable:false},
+  {item:"fireball",displayName:"Fireballs",lore:"Focus your magic to make fire",price:2500,priceColor:"green",bought:false,level:3,consumable:false},
+  {item:"decoy",displayName:"Decoy Grenades",lore:"Distract your foes for a bit",price:4500,priceColor:"green",bought:false,level:3,consumable:false},
+  {item:"wealthpower",displayName:"Wealth = Power",lore:"The more money you have, the more damage you do",price:300,priceColor:"green",bought:false,level:2,consumable:false},
+  //LEVEL 4 - ROUND 15
+  {item:"fortify_two",displayName:"Fortification II",lore:"Fortfiy your fortress (+100 max health)",price:3500,priceColor:"green",bought:false,level:4,consumable:false},
+  {item:"nakedstrength",displayName:"Naked Strength",lore:"Super weak but super strong",price:1300,bought:false,level:4,consumable:false},
+  {item:"five_gun",displayName:"Quintuple Gunner",lore:"Adds a quintuple shot to your ship",price:1000,priceColor:"green",bought:false,level:4,consumable:false},
+  //LEVEL 5 - ROUND 20
+  {item:"bazooka",displayName:"Bazooka",lore:"EXPLODES on impact",price:2500,priceColor:"green",bought:false,level:5, consumable:false},
+  {item:"lazer",displayName:"Lazer of Doom",lore:"Incinerates anything in its path", price: 10000, priceColor:"green", bought: false,level:5, consumable:false},
+  //LEVEL 6 - ROUND 25
+  {item:"fortify_three",displayName:"Fortification III",lore:"Almost impenetrable! (+500 Max Health)",price:9000,level:6,priceColor:"green",bought:false,consumable:false},
+  //CONSUMABLES
+  {item:"instant_health",displayName:"Instant Health", lore:"Restores 25% max health instantly on demand",price:75, priceColor:"green",bought:false,level:1, consumable:true},
+  {item:"speed",displayName:"Speedy Shooter",lore:"3 seconds of lazer fast shooting",price:250,priceColor:"green",bought:false,                     level:1, consumable:true},
+  {item:"triple_money",displayName:"Money Potion",lore:"20 seconds of triple money",price:100,priceColor:"green",bought:false,                      level:1, consumable:true},
+  {item:"freeze",displayName:"Freeze Potion", lore:"Freezes all enemies on screen", price: 200, priceColor:"green",bought:false,                    level:2, consumable:true},
+  {item:"death",displayName:"Nuke",lore:"Kills all enemy on screen",price:400,priceColor:"green",bought:false,                                      level:2, consumable:true},
+]
+
+//adding the stars to the array
+stars = [];
+starColors = ["lime", "aqua","yellow","magenta", "white", "white", "white","white","white","white","white","red"]; //adds many white to make other colors more rare
+for (i = 0; i < 50; i++) {
+    x = Math.ceil(Math.random()*1050)-300;
+    y = Math.ceil(Math.random()*1050)-300;
+    size = Math.ceil(Math.random()*2);
+    xv = Math.random()*size/64+0.02;
+    color = starColors[Math.floor(Math.random()*starColors.length)]
+    stars.push({x:x,y:y,size:size,xv:xv,color:color});
+}
+
+//shop stuff
+item1=item2=item3=0;
+selection = 0;
+shopTimer = 0;
+
+function useConsumable(element) {
+  if (screen == "game") {
+    if (!consumables[element]) {
+      message = "No consumable in that slot!";
+      setTimeout(function(){message = "";},2500)
+    } else {
+      switch(consumables[element].type) {
+        case "instant_health":
+          health+=maxHealth*0.25;
+          break;
+        case "freeze":
+          freeze = true;
+          setTimeout(function(){
+            freeze = false;
+            for (i = 0; i < enemies.length; i++) {
+              if (enemies[i].type == "fighter") {
+                enemies[i].shootSpeed = 0;
+              }
+            } 
+          },7000)
+          break;
+        case "death":
+          for (i = 0; i < enemies.length; i++) {
+            enemies[i].health = 0;
+          }
+          break;
+        case "speed":
+          previousSpeed = shootSpeed;
+          shootSpeed = 50;
+          setTimeout(function(){shootSpeed = previousSpeed},3000);
+          break;
+        case "triple_money":
+          moneyMultiplier*=3;
+          trippleMoneyActive = true;
+          setTimeout(function(){moneyMultiplier/=3; trippleMoneyActive = false;},20000);
+          break;
+      } 
+    }
+  consumables.splice(element,1);
+  }
+}
+
+decoyChanges = [];
+function useItem(element) {
+  if (screen == "game") {
+    if (!reusables[element]) {
+      message = "No item to use in that slot";
+      setTimeout(function(){message = "";},2500);
+    } else if (reusables[element].timer >= reusables[element].maxTimer) {
+      switch (reusables[element].type) {
+        case "decoy":
+          decoys.push({x:px-3,y:py,xv:-3,yv:(Math.random()*3)-6,yStop:(Math.random()*200)+100,xa:0.2,age:0,lifeSpan:400});
+          break;
+        case "fireball":
+          bullets.push({x: px-3, y: py, yv: 14, xv: -10, acceleration: 2, originalX: px-3, bulletStrength: bulletPower*2/bulletPowerMultiplier, size: 7, type:"fireball", color: "orange", homing: false, slow: false, age: 0});
+          break;
+        case "healer":
+          health+=maxHealth/4;
+          break;
+        case "mass_sludge":
+          for (i = 0; i < enemies.length; i++) {
+            if (!enemies[i].slowed) {
+              enemies[i].yv*=0.6;
+              enemies[i].slowed = true;
+            }
+          }
+          break;
+      }
+      reusables[element].timer = 0;
+    } else if (reusables[element].timer < reusables[element].maxTimer) {
+      message = "Not ready! Wait: "+Math.round((reusables[element].maxTimer-reusables[element].timer)*10)/10+" Seconds";
+      setTimeout(function(){message = "";},2500);
+    }
+  }
+}
+
+setInterval(function() { //regeneration
+  if (screen == "game" && totalRoundEnemies != roundEnemies && health < maxHealth && pause == false) {
+    health+=regeneration;
+  }
+},1000);
+
+moneyOn = false;
+function moneyFlash() {
+  if (trippleMoneyActive) {
+    if (moneyOn) moneyOn = false;
+    else moneyOn = true;
+  }
+}
+
+function secondTimer() {
+  for (i = 0; i < reusables.length; i++) {
+    if (!pause && screen == "game")
+      reusables[i].timer+=0.1;
+  }
+}
+
+function buy (element) {
+  if (money >= items[element].price && items[element].bought == false) {
+    money-=items[element].price;
+    if (items[element].consumable == false) purchasedItems.push(items[element]);
+    items[element].bought = true;
+    //all item possibilities, uses switch to keep sleek code and run fastestS
+    switch (items[element].item) {
+      case "fullmetal":
+        bulletPower+=15;
+        shootSpeed+=100;
+        break;
+      case "dogfood":
+        pSize+=2;
+        bulletPower+=3.5;
+        movementSpeed+=0.5;
+        break;
+      case "highercrit":
+        critChance+=0.1;
+        break;
+      case "bettercrit":
+        critDamage+=0.25;
+        break;
+      case "knives":
+        knife = true;
+        break;
+      case "double_gun":
+        unlockedWeapons.push("Double");
+        break;
+      case "5.56":
+        bulletPower+=5*bulletPowerMultiplier;
+        break;
+      case "allstats": //the gift
+        bulletPower+=2*bulletPowerMultiplier;
+        maxHealth+=5;
+        health+=5;
+        bulletSize+=0.2;
+        regeneration+=0.025;
+        if (shootSpeed >= 100) shootSpeed-=40;
+        break;
+      case "prayers":
+        lives++;
+        break;
+      case "cattail":
+        lives = 9;
+        health = 20;
+        maxHealth = 20;
+        break;
+      case "bloodbullets":
+        if (!chocolateMilk) shootSpeed+=100;
+        bulletPower+=20*bulletPowerMultiplier;
+        bloodSoaked = true;
+        break;
+      case "fortify_one":
+        maxHealth+=20;
+        health+=20;
+        break;
+      case "fortify_two":
+        maxHealth+=100;
+        health+=100;
+        break;
+      case "fortify_three":
+        maxHealth+=500;
+        health+=500;
+        break;
+      case "shotgun":
+        unlockedWeapons.push("Shotgun");
+        break;
+      case "longerbarrel":
+        bulletSpeed+=5;
+        bulletPower+=6;
+        break;
+      case "sidegun":
+        sideGunners = true;
+        break;
+      case "slowshot":
+        slowShot = true;
+        break;
+      case "wiggly":
+        wiggly = true;
+        break;
+      case "boomerang":
+        boomerang = true;
+        break;
+      case "pointyship":
+        pointyShip = true;
+        console.log(pointyShip)
+        break;
+      case "regen_one":
+        regeneration+=0.25;
+        break;
+      case "orbiter":
+        orbiters.push({owner:"player",color:"blue",radius:10, x:px, y:py, xv:0, yv:0});
+        break;
+      case "lazer":
+        unlockedWeapons.push("Lazer");
+        break;
+      case "bazooka":
+        unlockedWeapons.push("Bazooka");
+        break;
+      case "better_jets":
+        movementSpeed+=2;
+        break;
+      case "submachine":
+        if (shootSpeed > 50) bulletPower*=0.75;
+        if (shootSpeed > 300) {
+          shootSpeed-=200;
+        } else if (shootSpeed < 100) { 
+          shootSpeed = 50;
+        }else if (shootSpeed < 300) {
+          shootSpeed-=50
+        }
+        break;
+      case "triple_gun":
+        unlockedWeapons.push("Triple Shot");
+        break;
+      case "five_gun":
+        unlockedWeapons.push("Five Shot");
+        break;
+      case "buddy":
+        buddies.push({x:px,y:py,shootSpeed:100,shootWait:0,speed:3.5,size:20,type:"buddy_one",color:"orange",shape:"triangle"});
+        break;
+      case "harder_bullets":
+        bulletPower+=10*bulletPowerMultiplier;
+        break;
+      case "machine":
+        if (shootSpeed > 250) {
+          shootSpeed = 150;
+        } else if (shootSpeed <= 250 && shootSpeed >= 100) {
+          shootSpeed = 100;
+        }
+        if (chocolateMilk) {
+          bulletPower*=7;
+          bulletSize*=2;
+        }
+        bulletPower*=0.75; 
+        break;
+      case "homing":
+        homing = true;
+        break;
+      case "guider":
+        guider = true;
+        break;
+      case "iron_wall":
+        ironWall = true;
+        break;
+      case "bigger_bullets":
+        bulletSize*=1.5;
+        bulletPower+=7*bulletPowerMultiplier;
+        break;
+      case "milk":
+        bulletSize/=2;
+        shootSpeed/=6;
+        bulletPower/=7;
+        bulletPowerMultiplier = 0.14;
+        chocolateMilk = true;
+        break;
+      case "fourleaf":
+        luck+=0.08;
+        break;
+      case "fiveleaf":
+        luck+=0.25;
+        break;
+      case "nakedstrength":
+        health/=5;
+        bulletPower*=2*bulletPowerMultiplier;
+        break;
+      case "titanium":
+        dmgDeflection-=0.2;
+        break;
+      case "sentrygun":
+        buddies.push({x:px,y:680,shootSpeed:60,shootWait:0,speed:0,size:40,type:"Sentry Gun",color:"green",shape:"sentry",sentryAngle:0});
+        break;
+      case "wealthpower":
+        wealthpower = true;
+        break;
+      case "fireball":
+        if (reusables.length < 3) reusables.push({type:"fireball",timer:3,maxTimer:3,percent:0,symbol:"🔥",color:"orange"});
+        else {
+          money+=itmes[element].price;
+          sendMessage("No more space for reusables");
+        }
+        break;
+      case "decoy":
+        if (reusables.length < 3) reusables.push({type:"decoy",timer:150,maxTimer:150,percent:0,symbol:"✷",color:"gray"});
+        else {
+          money+=itmes[element].price;
+          sendMessage("No more space for reusables");
+        }
+        break;
+      case "healer":
+        if (reusables.length < 3) reusables.push({type:"healer",timer:120,maxTimer:120,percent:0,symbol:"❤",color:"red"});
+        else {
+          money+=itmes[element].price;
+          sendMessage("No more space for reusables");
+        }
+        break;
+      case "mass_sludge":
+        if (reusables.length < 3) reusables.push({type:"mass_sludge",timer:90,maxTimer:90,percent:0,symbol:"💩",color:"saddlebrown"});
+        else {
+          money+=itmes[element].price;
+          sendMessage("No more space for reusables");
+        }
+        break;
+      case "black_hole":
+        if (reusables.length < 3) reusables.push({type:"black_hole",timer:180,maxTimer:180,percent:0,symbol:"○",color:"white"});
+        else {
+          money+=itmes[element].price;
+          sendMessage("No more space for reusables");
+        }
+        break;
+      //CONSUMABLE TINGS
+      case "instant_health":
+        if (consumables.length < 3) {
+          consumables.push({type:"instant_health",display:"❤",color:"red"});
+        } else {
+          money+=items[element].price;
+        }
+        items[element].bought = false;
+        break;
+      case "freeze":
+        if (consumables.length < 3) {
+          consumables.push({type:"freeze",display:"❄",color:"aqua"});
+        } else {
+          money+=items[element].price;
+        }
+        items[element].bought = false;
+        break;
+      case "death":
+        if (consumables.length < 3) {
+          consumables.push({type:"death",display:"☠",color:"white"});
+        } else {
+          money+=items[element].price;
+        }
+        items[element].bought = false;
+        break;
+      case "speed":
+        if (consumables.length < 3) {
+          consumables.push({type:"speed",display:"☄",color:"blue"});
+        } else {
+          money+=items[element].price;
+        }
+        items[element].bought = false;
+        break;
+      case "triple_money":
+        if (consumables.length < 3) {
+          consumables.push({type:"triple_money",display:"🤑",color:"green"});
+        } else {
+          money+=items[element].price;
+        }
+        items[element].bought = false;
+        break;
+    }
+  } else if (items[element].bought) {
+    message = "Already Bought!";
+    setTimeout(function(){message = "";},2500);
+  } else if (money <= items[element].price) {
+    message = "Not Enough Money!";
+    setTimeout(function(){message = "";},2500);
+  }
+}
+
+// summoning stuff
+summonWait = 0;
+boss = "";
+bossSummoned = false;
+
+function drawCircularProgress(x,y,radius,percent,color) {
+  ctx.beginPath();
+  ctx.lineWidth="1.5";
+  ctx.strokeStyle="white";
+  ctx.arc(x,y,radius,0,2*Math.PI);
+  ctx.stroke();
+  ctx.beginPath();
+  if (percent > 1) percent = 1;
+  ctx.strokeStyle=color;
+  ctx.lineWidth=radius;
+  ctx.arc(x,y,radius/2,0,2*percent*Math.PI);
+  ctx.stroke();
+}
+
+//returns the x and y velocities that would lead the object to a certain position
+function track(x,y,targetX,targetY,netVelocity) {
+  //all the maths
+  xDisp = x - targetX;
+  yDisp = y - targetY;
+  radians = Math.atan(xDisp/yDisp);
+  if (radians < 0) {
+    radians*=-1;
+  }
+  yv = Math.cos(radians)*netVelocity;
+  if (y < targetY) {
+    yv *= -1;
+  }
+  xv = Math.sin(radians)*netVelocity;
+  if (x < targetX) {
+    xv *= -1;
+  }
+  return {xv,yv};
+}
+
+//returns the angle that is between two positions
+function lookAtPosition(x1,y1,x2,y2) {
+  angle = 0;
+  xDisp = x1 - x2;
+  yDisp = y1 - y2;
+  angle = Math.atan(xDisp/yDisp) * (180/Math.PI) * -1;
+  if (y2 > y1) {
+    angle+=180;
+  }
+  return angle;
+}
+
+//returns the angle that is given by the velocity
+function lookAtVelocity(xv,yv) {
+  angle = Math.atan(xv/yv) * (180/Math.PI) * -1;
+  return angle;
+}
+
+function drawRotatedImage(rotateImg,x,y,width,height,degrees,pointOfInterest = 0.5) { //point of interest is given between 0 and 1, 0.5 is the center, 0 is the bottom 
+  ctx.save();
+  ctx.beginPath();
+  ctx.translate(x+(width*pointOfInterest),y+(height*pointOfInterest));
+  ctx.rotate(degrees * Math.PI/180);
+  ctx.drawImage(rotateImg,-width*pointOfInterest,-height*pointOfInterest,width,height);
+  ctx.restore();
+}
+
+function reset() {
+  gameTimer = 0;
+  difficulty = 1;
+  score = 0;
+  scoreDisplay = 0;
+  money = 50;
+  bibleShake = false;
+  health = 60;
+  smoothHealth = 0;
+  maxHealth = 60;
+  lives = 1;
+  totalRoundEnemies = 0;
+  tEnemies = 0;
+  summonedRoundEnemies = 0;
+  roundEnemies = 5;
+  dmgDeflection = 1;
+  bullets.splice(0,bullets.length);
+  enemies.splice(0,enemies.length);
+  unlockedWeapons = ["Single"];
+  px = canv.width/2;
+  raColor = 0;
+  for (i = 0; i < round; i++) {
+    localStorage.totalRounds++; 
+  }
+  luck = 0;
+  round = 1;
+  pause = false;
+  movementSpeed = 5;
+  shootSpeed = 750;
+  bulletPower = 25;
+  bulletSize = 6;
+  bulletPowerMultiplier = 1;
+  regeneration = 0;
+  critChance = 0.2;
+  critDamage = 0.5;
+  guider = false;
+  dead = false;
+  ironWall = false;
+  chocolateMilk = false;
+  bloodSoaked = false;
+  sideGunners = false;
+  slowShot = false;
+  wiggly = false;
+  boomerang = false;
+  pointyShip = false;
+  knife = false;
+  wealthpower = false;
+  wealthDmg = 0;
+  orbiters.splice(0,orbiters.length);
+  purchasedItems.splice(0,purchasedItems.length);
+  consumables.splice(0,consumables.length);
+  fallingConsumables.splice(0,fallingConsumables.length);
+  decoys.splice(0,decoys.length);
+  reusables.splice(0,reusables.length);
+  particles.splice(0,particles.length);
+  bosses.splice(0,bosses.length);
+  buddies.splice(0,buddies.length);
+  moneybags.splice(0,moneybags.length);
+  for (i = 0; i < items.length; i++) {
+    items[i].bought = false;
+  }
+  homing = false;
+  boss = "";
+}
+
+function keyPush(evt) {
+    //alert(evt.keyCode);
+    switch (evt.keyCode) {
+      case 38: //case for up arrow, moves selection up on main screen
+        if (screen == "main") buttonPosition--;
+        else if (screen == "game" && pause == false) weaponPosition++;
+        else if (pause == true) pauseSelection--;
+        else if (screen == "settings") settingPosition--;
+        break;
+      case 40: //case for down arrow, moves selection down on main screen
+        if (screen == "main") buttonPosition++;
+        else if (screen == "game" && pause == false) weaponPosition--;
+        else if (pause == true) pauseSelection++;
+        else if (screen == "settings") settingPosition++;
+        break;
+      case 37: //case for left arrow for moving item selection
+        if (screen == "shop") selection--;
+        if (screen == "character") characterSelect--;
+        break;
+      case 39: //case for right arrow
+        if (screen == "shop") selection++;
+        if (screen == "character") characterSelect++;
+        break;
+      case 13: //case for enter
+        if (popup) {
+          popups.splice(0,1);
+        } 
+        else if (screen == "main") {
+          selectionMade = true;
+          mainTimer = 0;
+        } else if (screen == "shop") {
+          if (selection == 0) {
+            buy(item1);
+          } else if (selection == 1) {
+            buy(item2);
+          } else if (selection == 2) {
+            buy(item3);
+          }
+        } else if (screen == "game" && pause == true) {
+          if (pauseSelection == 0) {
+            pause = false;
+          } else if (pauseSelection == 1) {
+            reset();
+            screen = "main";
+          } 
+        } else if (screen == "character") {
+          if (characters[characterSelect].unlocked) {
+            movementSpeed = characters[characterSelect].movementSpeed;
+            health = characters[characterSelect].health;
+            maxHealth = characters[characterSelect].maxHealth;
+            regeneration = characters[characterSelect].regeneration;
+            lives = characters[characterSelect].lives;
+            money = characters[characterSelect].money;
+            bulletPower = characters[characterSelect].bulletPower;
+            bulletSpeed = characters[characterSelect].bulletSpeed;
+            bulletSize = characters[characterSelect].bulletSize;
+            shootSpeed = characters[characterSelect].shootSpeed;
+            if (characters[characterSelect].name == "Wizards") {
+              //importing special things for the wizard
+              reusables.push({type:"fireball",timer:3,maxTimer:3,percent:0,symbol:"🔥",color:"orange"});
+            } else if (characters[characterSelect].name == "Healers") {
+              reusables.push({type:"healer",timer:120,maxTimer:120,percent:0,symbol:"❤",color:"red"});
+            }
+            startCharacterFade = true;
+          } else sendMessage("You haven't unlocked that yet!");
+        } else if (screen == "settings") {
+          if (settingButtons[settingPosition].enabled) settingButtons[settingPosition].enabled = false;
+          else settingButtons[settingPosition].enabled = true;
+        }
+        break;
+      case 27: //case for escape to pause the game
+        if (screen == "game") {
+          pause = !pause;
+        } else if (screen == "death") {
+          screen = "main";
+          //resetting variables
+          reset();
+        } else if (screen == "shop") {//returns to the game from the shop
+          roundCont = true;
+          rv = 0;
+          lv = 0;
+          screen = "game";
+        } else if (screen == "howToPlay" || screen == "statistics" || screen == "settings" || screen == "updateNotes") {
+          screen = "main";
+        } 
+        if (screen == "character") screen = "main";
+        break;
+      case 89: //case for y to continue to shop
+        if (screen == "game" && shopAvailable == true) {
+          screen = "shop";
+          shopTimer = 0;
+          item1=item2=item3=0;
+        }
+        break;
+      case 78: //case for n to not continue
+        if (screen == "game") {
+          roundCont = true;
+        }
+        break;
+      case 82: //case for r to reset stats
+        if (screen == "statistics") {
+          localStorage.maxRound = 0;
+          localStorage.maxScore = 0;
+          localStorage.totalKilledEnemies = 0;
+          localStorage.totalRounds = 0;
+        }
+        break;
+      case 83: //case for s
+        if (screen == "shop" && money >= 25 && shuffled == false) {
+          money-=25;
+          shopTimer = 0;
+          shuffled = true;
+        } else if (screen == "game") {
+          shielding = true;
+        }
+      case 72: //case for h
+        if (evt.ctrlKey && evt.shiftKey) {
+          if (showHitbox) showHitbox = false;
+          else showHitbox = true;
+        }
+        break
+      case 88: //case for x
+        if (evt.ctrlKey && evt.shiftKey) {
+          if (showInfo) showInfo = false;
+          else showInfo = true;
+        }
+        break;
+      case 65: //a
+        rv = movementSpeed;
+        rBreak = false;
+        break;
+      case 68: //d
+        lv = movementSpeed;
+        lBreak = false;
+        break;
+      case 32: //case for space bar: summons bullet
+        if (screen == "game") {
+          if (shooting == false && shootWait == 0) {
+            shooting = true;
+            shoot();
+            shootControl();
+          }
+        } 
+        if (lazer) lazerShooting = true;
+        break;
+      case 49: //1
+        useConsumable(0);
+        break;
+      case 50: //2
+        useConsumable(1);
+        break;
+      case 51: //3
+        useConsumable(2);
+        break;
+      case 81: //q
+        useItem(0);
+        break;
+      case 87: //w
+        useItem(1);
+        break;
+      case 69: //e
+        useItem(2);
+        break;
+    }
+}
+
+function keyNotPush(evt) {
+    switch (evt.keyCode) {
+      case 65:
+        rBreak = true;
+        break;
+      case 68:
+        lBreak = true;
+        break;
+      case 32:
+        shooting = false;
+        lazerShooting = false;
+        break;
+      case 83:
+        shielding = false;
+    }
+}
+
+function sendMessage(functionMessage) {
+  message = functionMessage;
+  setTimeout(function(){message = "";},2500);
+}
+
+sendPopUp("This is a developmental version. Expect several bugs and unfinished features. Press <enter> to continue");
+
+
+function sendPopUp(text) {
+  popups.push({text:text});
+}
+</script>
+</body>
+</html> 

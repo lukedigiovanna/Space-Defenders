@@ -1,0 +1,27 @@
+Space Defenders
+
+Code, graphics, and sound created by Luke DiGiovanna.
+Future font downloaded from https://fontzone.net/
+
+MAKE SURE YOU EXTRACT THE SPACE DEFENDERS ZIP FILE OR THE PROGRAM MAY NOT WORK!
+
+Note: This game does not work in Internet Explorer (or Microsoft Edge) or any other browser that uses
+web browser control.
+
+Space defenders is a game inspired by the arcade game Galaga and The Binding of Isaac. 
+Fight enemy ships and defend your home base (planet). Try and make it through as many rounds
+as you can before you are invaded. After each round you may visit the shop and buy items 
+and powerups to help you defeat the enemies. Enemies also have a 1% chance of spawning a 
+"consumable" upon death which can then be used during the game to give you temporary powerups.
+like instant health, freeze, and nuke. You can purchase "reusables" in the shop which can be
+activated by pressing q, w, or e.
+
+:::CONTROLS:::
+arrow keys: move selection up, down, left, or right on various screens (main, shop, pause etc.)
+enter: make a selection
+a: move left
+d: move right
+space bar: shoot
+1,2,3: use a consumable based on the slot it is in
+q,w,e: use reusable
+escape: pause game or go back a page
